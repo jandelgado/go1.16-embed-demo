@@ -1,28 +1,22 @@
-// go 1.16 "embed" demo
-// 18.12.2020 Jan Delgado
+// go 1.16 "embed.FS" demo
+// (c) Jan Delgado 12-2020
 package main
 
 import (
-	"embed"
 	"fmt"
 	"io/fs"
 )
 
-// contents of directory "assets" are stored in variable assets
-//go:embed assets
-var assets embed.FS
-
-func printDir(dir fs.ReadDirFS, name string) {
-	files, err := dir.ReadDir(name)
+func printDir(assets fs.FS, name string) {
+	files, err := fs.ReadDir(assets, name)
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println("contents of dir %s", name)
+	fmt.Printf("contents of dir %s\n", name)
 	for _, entry := range files {
 		fmt.Printf("  name=%-10s isdir=%v\n", entry.Name(), entry.IsDir())
 	}
-
 }
 
 func printFile(assets fs.FS, name string) {
